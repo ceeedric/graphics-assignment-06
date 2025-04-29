@@ -44,12 +44,12 @@ void Camera::TakePicture(Scene *scene) {
 	for (int x = 0; x < widthRes; x++) {
 		for (int y = 0; y < heightRes; y++) {
 
-			glm::vec3 viewDirection = -w;
-			glm::vec3 p0 = eye - viewDirection * focalDistance - (widthRes / 2.0f) * (x - widthRes) - (heightRes / 2.0f) * (y - heightRes);
+            float height = focalDistance * tan(fovY / 2.0f) * 2.0f;
+            float width = height * aspectRatio;
+            float pixelSize = width / widthRes;
 
-			float height = focalDistance * tanf(fovY / 2.0f) * 2.0f;
-			float width = height * aspectRatio;
-			float pixelSize = width / widthRes;
+			glm::vec3 viewDirection = -w;
+			glm::vec3 p0 = eye - viewDirection * focalDistance - (width / 2.0f) * u - (height / 2.0f) * v;
 
 			glm::vec3 pixelPosition = p0 + pixelSize * ((x + 0.5f) * u + (y + 0.5f) * v);
 			glm::vec3 color = RayTrace(pixelPosition, viewDirection, scene, 0);
@@ -66,11 +66,10 @@ void Camera::TakePicture(Scene *scene) {
 bool Camera::FindIntersection(const glm::vec3& origin, const glm::vec3& direction, Scene* scene, float& t, Shape*& hitShape) {
 	float minT = INFINITY;
 	for (auto shape : scene->GetShapes()) {
-		float currentT = INFINITY;
+		float currentT;
 		if (shape->intersect(origin, direction, currentT)) {
-			if (minT < currentT) {
+			if (currentT < minT) {
 				minT = currentT;
-				std::cout << "shape" << std::endl;
 				hitShape = shape;
 				t = minT;
 			}
