@@ -34,24 +34,17 @@ Camera::Camera(int widthRes, int heightRes,
 }
 
 void Camera::TakePicture(Scene *scene) {
-    // loop through each pixel
-    // on each pixel, first create a ray pointing from the camera to the pixel
-    // then call a function to determine the color of the ray -
-    //          most computations will be done inside this function
-    //          It should be recursive to account for reflections and other things
-    // the returned color becomes the color of that pixel and the color should be modified
-    // in the renderedImage array
 	for (int x = 0; x < widthRes; x++) {
 		for (int y = 0; y < heightRes; y++) {
 
             float height = focalDistance * tan(fovY / 2.0f) * 2.0f;
             float width = height * aspectRatio;
-            float pixelSize = width / widthRes;
+            float pixelSize = width / static_cast<float>(widthRes);
 
 			glm::vec3 viewDirection = -w;
 			glm::vec3 p0 = eye - viewDirection * focalDistance - (width / 2.0f) * u - (height / 2.0f) * v;
 
-			glm::vec3 pixelPosition = p0 + pixelSize * ((x + 0.5f) * u + (y + 0.5f) * v);
+			glm::vec3 pixelPosition = p0 + pixelSize * ((static_cast<float>(x) + 0.5f) * u + (static_cast<float>(y) + 0.5f) * v);
 			glm::vec3 color = RayTrace(pixelPosition, viewDirection, scene, 0);
 
 			//std::cout << color.x << " " << color.y << " " << color.z << std::endl;
@@ -86,7 +79,7 @@ glm::vec3 Camera::RayTrace(const glm::vec3& origin, const glm::vec3& direction, 
 	if (FindIntersection(origin, direction, scene, t, shape)) {
 		totalColor = shape->ka * ambientLightIntensity; // ambient light
 		for (auto light : scene->GetLights()) {
-			glm::vec3 c = glm::vec3(1, 1, 1); // intensity of point light source
+			glm::vec3 c = glm::vec3(0, 0, 0); // intensity of point light source
 			glm::vec3 normal = shape->getNormal(origin);
 			glm::vec3 diffuse = c * shape->kd * (glm::dot(light->position, normal) / (light->position.length() * normal.length())); // diffuse
 			totalColor += diffuse;
