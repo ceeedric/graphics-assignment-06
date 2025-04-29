@@ -1,16 +1,33 @@
 #include "Sphere.h"
 
-Sphere::Sphere()
-{
+#include <algorithm>
+#include <iostream>
+#include <ostream>
+
+bool Sphere::intersect(const glm::vec3& origin, const glm::vec3& direction, float& t) const {
+    float a = dot(direction, direction);
+    float b = 2 * dot(origin - center, direction);
+    float c = dot(origin - center, origin - center) - (radius * radius);
+    float discriminant = b * b - 4 * a * c;
+
+    if (discriminant < 0)
+        return false;
+
+    float t0 = (-b - discriminant) / (2 * a);
+    float t1 = (-b + discriminant) / (2 * a);
+
+    if (t0 > EPSILON) {
+        t = t0;
+        return true;
+    }
+    if (t1 > EPSILON) {
+        t = t1;
+        return true;
+    }
+
+    return false;
 }
 
-Sphere::~Sphere()
-{
+glm::vec3 Sphere::getNormal(const glm::vec3& point) const {
+    return normalize(point - center);
 }
-
-// an intersect method will be needed here. Spheres in this assignment aren't actual
-// rendered objects they simply return "true" when there is a collision. All
-// we need to do is check against the sphere function
-// The values provided in the assignment PDF should become member variables of Shape
-// except for radius, which will go in Sphere.h.
-

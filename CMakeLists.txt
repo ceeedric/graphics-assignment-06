@@ -9,7 +9,9 @@ FILE(GLOB_RECURSE HEADERS "src/*.h")
 FILE(GLOB_RECURSE GLSL "shaders/*.glsl")
 
 # Set the executable.
-ADD_EXECUTABLE(${CMAKE_PROJECT_NAME} ${SOURCES} ${HEADERS} ${GLSL})
+ADD_EXECUTABLE(${CMAKE_PROJECT_NAME} ${SOURCES} ${HEADERS} ${GLSL}
+		src/Triangle.h
+		src/Triangle.cpp)
 
 # Setup GLM
 SET(GLM_INCLUDE_DIR "$ENV{GLM_INCLUDE_DIR}")

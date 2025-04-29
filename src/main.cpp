@@ -6,7 +6,13 @@
 #include <iostream>
 #include "Camera.h"
 #include "Scene.h"
+#include "Sphere.h"
 
+#define EYE_VECTOR glm::vec3(0.0, 0.0, 7.0)
+#define LOOK_AT_VECTOR glm::vec3(0.0, 0.0, 0.0)
+#define UP_VECTOR glm::vec3(0.0, 1.0, 0.0)
+#define FOV_Y 45.0f
+#define FOCAL_DISTANCE 1.0f
 
 #define WINDOW_HEIGHT 800
 #define WINDOW_WIDTH 1200
@@ -39,8 +45,8 @@ void Init()
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	ClearFrameBuffer();
 
-	Scene scene = Scene();
-	Camera camera = Camera(WINDOW_WIDTH, WINDOW_HEIGHT);
+	Scene scene = Scene(false);
+	Camera camera = Camera(WINDOW_WIDTH, WINDOW_HEIGHT, EYE_VECTOR, LOOK_AT_VECTOR, UP_VECTOR, FOV_Y, FOCAL_DISTANCE);
 	
 	auto start = std::chrono::high_resolution_clock::now();
 	camera.TakePicture(&scene);
