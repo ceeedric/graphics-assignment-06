@@ -84,18 +84,17 @@ glm::vec3 Camera::RayTrace(const glm::vec3& origin, const glm::vec3& direction, 
 	if (FindIntersection(origin, direction, scene, t, shape)) {
 		// ambient light
 		totalColor = shape->ka * ambientLightIntensity;
+		glm::vec3 ray = origin + t * direction;
+		glm::vec3 normal = shape->getNormal(ray);
+
 
 		for (auto light : scene->GetLights()) {
-			glm::vec3 ray = origin + t * direction;
-			glm::vec3 normal = shape->getNormal(ray);
 			glm::vec3 l = glm::normalize(light->position - ray);
-
 			glm::vec3 shadowOrigin = ray + 0.0001f * normal;
-			glm::vec3 shadowDir = glm::normalize(light->position - ray);
 			float shadowT;
 			Shape* shadowHit = nullptr;
 			float lightDistance = glm::length(light->position - ray);
-			if (FindIntersection(shadowOrigin, shadowDir, scene, shadowT, shadowHit) && shadowT < lightDistance)
+			if (FindIntersection(shadowOrigin, l, scene, shadowT, shadowHit) && shadowT < lightDistance)
 				continue;
 
 			// diffuse light
@@ -107,6 +106,16 @@ glm::vec3 Camera::RayTrace(const glm::vec3& origin, const glm::vec3& direction, 
 			glm::vec3 e = glm::normalize(eye - ray);
 			float specular = glm::pow(dot(reflected, e), shape->n);
 			totalColor += (light->color * shape->ks * specular);
+		}
+
+		if (glm::length(shape->km) > 0.0f) {
+			// since V in the slides goes out of the surface and our direction goes into it, we
+			// must flip it to still use the same formula as the slides
+			glm::vec3 v = -direction;
+			glm::vec3 reflectionDir = normalize(2.0f * glm::dot(v, normal) * normal - v);
+			glm::vec3 reflectionRay = ray + 0.0001f * reflectionDir; // shoot the ray
+			glm::vec3 reflectedColor = RayTrace(reflectionRay, reflectionDir, scene, depth + 1);
+			totalColor += shape->km * reflectedColor;
 		}
 	}
 
