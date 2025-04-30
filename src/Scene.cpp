@@ -18,27 +18,27 @@ Scene::Scene(bool loadBunny) {
     shapes.push_back(sphere1);
 
     Sphere * sphere2 = new Sphere(glm::vec3(1.0f, -0.5f, 3.0f), 0.5f);
-    sphere1->ka = glm::vec3(0.1f, 0.1f, 0.1f);
-    sphere1->kd = glm::vec3(0.0f, 0.0f, 1.0f);
-    sphere1->ks = glm::vec3(1.0f, 1.0f, 1.0f);
-    sphere1->km = glm::vec3(0.0f, 0.0f, 0.0f);
-    sphere1->n = 10.0f;
+    sphere2->ka = glm::vec3(0.1f, 0.1f, 0.1f);
+    sphere2->kd = glm::vec3(0.0f, 0.0f, 1.0f);
+    sphere2->ks = glm::vec3(1.0f, 1.0f, 1.0f);
+    sphere2->km = glm::vec3(0.0f, 0.0f, 0.0f);
+    sphere2->n = 10.0f;
     shapes.push_back(sphere2);
 
     Sphere * sphere3 = new Sphere(glm::vec3(-1.0f, -0.0f, -0.0f), 1.0f);
-    sphere1->ka = glm::vec3(0.0f, 0.0f, 0.0f);
-    sphere1->kd = glm::vec3(0.0f, 0.0f, 0.0f);
-    sphere1->ks = glm::vec3(0.0f, 0.0f, 0.0f);
-    sphere1->km = glm::vec3(1.0f, 1.0f, 1.0f);
-    sphere1->n = 0.0f;
+    sphere3->ka = glm::vec3(0.0f, 0.0f, 0.0f);
+    sphere3->kd = glm::vec3(0.0f, 0.0f, 0.0f);
+    sphere3->ks = glm::vec3(0.0f, 0.0f, 0.0f);
+    sphere3->km = glm::vec3(1.0f, 1.0f, 1.0f);
+    sphere3->n = 0.0f;
     shapes.push_back(sphere3);
 
     Sphere * sphere4 = new Sphere(glm::vec3(1.0f, 0.0f, -1.0f), 1.0f);
-    sphere1->ka = glm::vec3(0.0f, 0.0f, 0.0f);
-    sphere1->kd = glm::vec3(0.0f, 0.0f, 0.0f);
-    sphere1->ks = glm::vec3(0.0f, 0.0f, 0.0f);
-    sphere1->km = glm::vec3(0.8f, 0.8f, 0.8f);
-    sphere1->n = 0.0f;
+    sphere4->ka = glm::vec3(0.0f, 0.0f, 0.0f);
+    sphere4->kd = glm::vec3(0.0f, 0.0f, 0.0f);
+    sphere4->ks = glm::vec3(0.0f, 0.0f, 0.0f);
+    sphere4->km = glm::vec3(0.8f, 0.8f, 0.8f);
+    sphere4->n = 0.0f;
     shapes.push_back(sphere4);
 
     Plane * plane1 = new Plane(glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -50,11 +50,11 @@ Scene::Scene(bool loadBunny) {
     shapes.push_back(plane1);
 
     Plane * plane2 = new Plane(glm::vec3(0.0f, 0.0f, -3.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-    plane1->ka = glm::vec3(0.1f, 0.1f, 0.1f);
-    plane1->kd = glm::vec3(1.0f, 1.0f, 1.0f);
-    plane1->ks = glm::vec3(0.0f, 0.0f, 0.0f);
-    plane1->km = glm::vec3(0.0f, 0.0f, 0.0f);
-    plane1->n = 0.0f;
+    plane2->ka = glm::vec3(0.1f, 0.1f, 0.1f);
+    plane2->kd = glm::vec3(1.0f, 1.0f, 1.0f);
+    plane2->ks = glm::vec3(0.0f, 0.0f, 0.0f);
+    plane2->km = glm::vec3(0.0f, 0.0f, 0.0f);
+    plane2->n = 0.0f;
     shapes.push_back(plane2);
 }
 

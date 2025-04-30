@@ -50,9 +50,9 @@ void Camera::TakePicture(Scene *scene) {
 
 			//std::cout << color.x << " " << color.y << " " << color.z << std::endl;
 			int index = (y * widthRes + x) * 3;
-			renderedImage[index + 0] = color[0]; // Red
-			renderedImage[index + 1] = color[1]; // Green
-			renderedImage[index + 2] = color[2]; // Blue
+			renderedImage[index + 0] = glm::clamp(color.r, 0.0f, 1.0f); // Red
+			renderedImage[index + 1] = glm::clamp(color.g, 0.0f, 1.0f); // Green
+			renderedImage[index + 2] = glm::clamp(color.b, 0.0f, 1.0f); // Blue
 		}
 	}
 }
@@ -61,7 +61,7 @@ bool Camera::FindIntersection(const glm::vec3& origin, const glm::vec3& directio
 	float minT = INFINITY;
 	hitShape = nullptr;
 
-	for (auto shape : scene->GetShapes()) {
+	for (Shape * shape : scene->GetShapes()) {
 		float currentT;
 		if (shape->intersect(origin, direction, currentT)) {
 			if (currentT < minT) {
@@ -78,38 +78,35 @@ glm::vec3 Camera::RayTrace(const glm::vec3& origin, const glm::vec3& direction, 
 	if (depth >= MAX_DEPTH)
 		return glm::vec3(0, 0, 0);
 
-
 	float t;
 	Shape * shape = nullptr;
 	glm::vec3 totalColor = glm::vec3(0, 0, 0);
 	if (FindIntersection(origin, direction, scene, t, shape)) {
-		glm::vec3 intersectionPoint = origin + t * direction;
-		glm::vec3 normal = shape->getNormal(intersectionPoint);
-
 		// ambient light
-		totalColor += shape->ka * ambientLightIntensity;
+		totalColor = shape->ka * ambientLightIntensity;
 
 		for (auto light : scene->GetLights()) {
-			// Shadow ray direction and length
-			glm::vec3 lightDir = normalize(light->position - intersectionPoint);
-			float lightDistance = glm::length(light->position - intersectionPoint);
+			glm::vec3 ray = origin + t * direction;
+			glm::vec3 normal = shape->getNormal(ray);
+			glm::vec3 l = glm::normalize(light->position - ray);
 
+			glm::vec3 shadowOrigin = ray + 0.0001f * normal;
+			glm::vec3 shadowDir = glm::normalize(light->position - ray);
+			float shadowT;
 			Shape* shadowHit = nullptr;
-			float tShadow;
-			glm::vec3 shadowOrigin = intersectionPoint + 0.001f * normal;
-
-			if (FindIntersection(shadowOrigin, lightDir, scene, tShadow, shadowHit) && tShadow < lightDistance)
+			float lightDistance = glm::length(light->position - ray);
+			if (FindIntersection(shadowOrigin, shadowDir, scene, shadowT, shadowHit) && shadowT < lightDistance)
 				continue;
 
 			// diffuse light
-			float diffuseIntensity = glm::max(glm::dot(normal, lightDir), 0.0f);
-			glm::vec3 diffuse = shape->kd * diffuseIntensity * light->color;
-			totalColor += diffuse;
+			glm::vec3 diffuse = shape->kd * glm::max(glm::dot(l, normal), 0.0f);
+			totalColor += diffuse * light->color;
 
 			// specular light
-			glm::vec3 reflected = 2 * dot(light->position, normal) * normal - light->position;
-			glm::vec3 specular = shape->ks * glm::pow(glm::dot(reflected, eye - intersectionPoint), shape->n);
-			totalColor += (specular * light->color);
+			glm::vec3 reflected = 2 * dot(l, normal) * normal - l;
+			glm::vec3 e = glm::normalize(eye - ray);
+			float specular = glm::pow(dot(reflected, e), shape->n);
+			totalColor += (light->color * shape->ks * specular);
 		}
 	}
 

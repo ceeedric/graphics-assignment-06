@@ -27,7 +27,7 @@ private:
 	int heightRes;
 	float aspectRatio;
 	float* renderedImage;
-	glm::vec3 ambientLightIntensity = glm::vec3(1.0f, 1.0f, 1.0f);
+	glm::vec3 ambientLightIntensity = glm::vec3(0.0f);
 
 	static const int MAX_DEPTH = 5; // change this if performance is low
 };
