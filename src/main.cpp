@@ -37,7 +37,7 @@ void Init()
 {
 	glfwInit();
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
-	window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Assignment5 - Fabio", NULL, NULL);
+	window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Assignment6 - Fabio", NULL, NULL);
 	glfwMakeContextCurrent(window);
 	glewExperimental = GL_TRUE;
 	glewInit();
@@ -45,7 +45,7 @@ void Init()
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	ClearFrameBuffer();
 
-	Scene scene = Scene(false);
+	Scene scene = Scene(true);
 	Camera camera = Camera(WINDOW_WIDTH, WINDOW_HEIGHT, EYE_VECTOR, LOOK_AT_VECTOR, UP_VECTOR, FOV_Y, FOCAL_DISTANCE);
 	
 	auto start = std::chrono::high_resolution_clock::now();

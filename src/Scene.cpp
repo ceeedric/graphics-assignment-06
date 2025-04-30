@@ -1,13 +1,37 @@
+#include <iostream>
+#include <filesystem>
 #include "Scene.h"
+#define TINYOBJLOADER_IMPLEMENTATION
 
 #include "Plane.h"
 #include "Sphere.h"
+#include "OBJLoader.h"
+#include "tiny_obj_loader.h"
 
 Scene::Scene(bool loadBunny) {
     Light * light1 = new Light(glm::vec3(0.0f, 3.0f, -2.0f), glm::vec3(0.2f, 0.2f, 0.2f));
     Light * light2 = new Light(glm::vec3(-2.0f, 1.0f, 4.0f), glm::vec3(0.5f, 0.5f, 0.5f));
+
     lights.push_back(light1);
     lights.push_back(light2);
+
+    if (loadBunny) {
+        OBJLoader objLoader;
+        std::vector<Triangle> triangles;
+
+        objLoader.LoadOBJ("../../obj/bunny.obj", triangles,
+                          glm::vec3(0.1f, 0.1f, 0.1f),
+                          glm::vec3(0.0f, 0.0f, 0.0f),
+                          glm::vec3(1.0f, 1.0f, 0.5f),
+                          glm::vec3(0.0f, 0.0f, 0.0f),
+                          100.0f);
+
+        for (Triangle & triangle : triangles) {
+            shapes.push_back(&triangle);
+        }
+
+        return;
+    }
 
     Sphere * sphere1 = new Sphere(glm::vec3(-1.0f, -0.7f, 3.0f), 0.3f);
     sphere1->ka = glm::vec3(0.1f, 0.1f, 0.1f);
