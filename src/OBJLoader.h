@@ -11,7 +11,7 @@
 class OBJLoader {
 public:
     static bool LoadOBJ(const std::string& filename,
-                        std::vector<Triangle>& triangles,
+                        std::vector<Triangle*>& triangles,
                         const glm::vec3& ka = glm::vec3(0.1f),
                         const glm::vec3& kd = glm::vec3(0.0f, 0.0f, 1.0f),
                         const glm::vec3& ks = glm::vec3(1.0f),
@@ -70,13 +70,13 @@ public:
                     }
                 }
 
-                Triangle tri = new Triangle(vertices[0], vertices[1], vertices[2],
+                Triangle * tri = new Triangle(vertices[0], vertices[1], vertices[2],
                              normals[0], normals[1], normals[2]);
-                tri.ka = ka;
-                tri.kd = kd;
-                tri.ks = ks;
-                tri.km = km;
-                tri.n = n;
+                tri->ka = ka;
+                tri->kd = kd;
+                tri->ks = ks;
+                tri->km = km;
+                tri->n = n;
 
                 triangles.push_back(tri);
                 index_offset += 3;

@@ -4,6 +4,8 @@
 #include <ostream>
 #include <glm/glm.hpp>
 
+#include "BVH.h"
+
 
 Camera::Camera()
 {

@@ -3,6 +3,7 @@
 #include "Scene.h"
 #define TINYOBJLOADER_IMPLEMENTATION
 
+#include "BVH.h"
 #include "Plane.h"
 #include "Sphere.h"
 #include "OBJLoader.h"
@@ -17,19 +18,23 @@ Scene::Scene(bool loadBunny) {
 
     if (loadBunny) {
         OBJLoader objLoader;
-        std::vector<Triangle> triangles;
+        std::vector<Triangle*> triangles;
 
         objLoader.LoadOBJ("../../obj/bunny.obj", triangles,
                           glm::vec3(0.1f, 0.1f, 0.1f),
-                          glm::vec3(0.0f, 0.0f, 0.0f),
+                          glm::vec3(0.0f, 0.0f, 1.0f),
                           glm::vec3(1.0f, 1.0f, 0.5f),
                           glm::vec3(0.0f, 0.0f, 0.0f),
                           100.0f);
 
-        for (Triangle & triangle : triangles) {
-            shapes.push_back(&triangle);
-        }
-
+        std::cout << triangles.size() << " triangles" << std::endl;
+        BVH* bvh = new BVH(triangles);
+        bvh->ka = glm::vec3(0.1f, 0.1f, 0.1f);
+        bvh->kd = glm::vec3(0.0f, 0.0f, 1.0f);
+        bvh->ks = glm::vec3(1.0f, 1.0f, 0.5f);
+        bvh->km = glm::vec3(0.0f, 0.0f, 0.0f);
+        bvh->n = 100.0f;
+        shapes.push_back(bvh);
         return;
     }
 

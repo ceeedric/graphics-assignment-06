@@ -7,9 +7,13 @@ bool Triangle::intersect(const glm::vec3& origin, const glm::vec3& direction, fl
     glm::vec3 s1 = cross(direction, e2);
     glm::vec3 s2 = cross(s, e1);
 
-    glm::vec3 result = (1 / dot(s1, e1)) * glm::vec3(dot(s2, e2), dot(s1, s), dot(s2, direction));
+    glm::vec3 result = (1.0f / dot(s1, e1)) * glm::vec3(dot(s2, e2), dot(s1, s), dot(s2, direction));
+
+    if (result.x < 0 || result.y < 0 || result.z < 0 || result.y + result.z > 1)
+        return false;
+
     t = result.x;
-    return result.x >= 0;
+    return true;
 }
 
 glm::vec3 Triangle::getNormal(const glm::vec3& point) const {

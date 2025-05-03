@@ -7,7 +7,7 @@
 
 class BVH : public Shape {
 public:
-    explicit BVH(const std::vector<Triangle>& triangles);
+    explicit BVH(const std::vector<Triangle*>& triangles);
     ~BVH();
     mutable Shape* lastHitShape;
 
@@ -19,8 +19,8 @@ private:
     BVHNode* root;
     mutable const Triangle* lastHitTriangle;
 
-    void buildBVH(const std::vector<Triangle>& triangles);
-    void buildNode(BVHNode* node, std::vector<Triangle>& tris, int depth);
+    void buildBVH(const std::vector<Triangle*>& triangles);
+    void buildNode(BVHNode* node, std::vector<Triangle*>& tris, int depth);
     bool intersectNode(const BVHNode* node, const glm::vec3& origin,
                        const glm::vec3& direction, float& t) const;
 };

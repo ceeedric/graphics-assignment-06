@@ -11,7 +11,9 @@ FILE(GLOB_RECURSE GLSL "shaders/*.glsl")
 # Set the executable.
 ADD_EXECUTABLE(${CMAKE_PROJECT_NAME} ${SOURCES} ${HEADERS} ${GLSL}
 		src/Triangle.h
-		src/Triangle.cpp)
+		src/Triangle.cpp
+		src/BVH.cpp
+		src/BoundingBox.cpp)
 
 # Setup GLM
 SET(GLM_INCLUDE_DIR "$ENV{GLM_INCLUDE_DIR}")

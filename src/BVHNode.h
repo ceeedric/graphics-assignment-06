@@ -14,5 +14,5 @@ public:
     BoundingBox bounds;
     BVHNode* left;
     BVHNode* right;
-    std::vector<Triangle> triangles;
+    std::vector<Triangle*> triangles;
 };
